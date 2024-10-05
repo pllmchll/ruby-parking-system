@@ -17,10 +17,9 @@ def leave(slot)
 end
 
 def quit()
-    $run_program = false
+    exit
 end
 
-$run_program = true
 $commands = {
     "create_parking_lot" => {
         "method"    => method(:create_parking_lot),
@@ -41,7 +40,7 @@ $commands = {
 }
 
 # main program
-while $run_program == true do
+loop do
     print "> "
     input = gets.chomp
 
