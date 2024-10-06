@@ -52,11 +52,24 @@ def plate_numbers_for_cars_with_colour(color)
 end
 
 def slot_numbers_for_cars_with_colour(color)
-    puts "list of slot numbers"
+    output = ""
+    for i in 0..$lot.size
+        if !$lot[i].nil? and $lot[i][:color].downcase == color.downcase
+            output << "#{i+1}, "
+        end
+    end
+    puts output.empty? ? "No cars found" : output[0..-3]
 end
 
 def slot_number_for_registration_number(plate)
-    puts "slot number"
+    index = nil
+    for i in 0..$lot.size
+        if !$lot[i].nil? and $lot[i][:plate].downcase == plate.downcase
+            index = "#{i+1}"
+            break
+        end
+    end
+    puts index.nil? ? "Not found" : index
 end
 
 def quit()
