@@ -48,7 +48,7 @@ def plate_numbers_for_cars_with_colour(color)
             output << "#{car[:plate]}, "
         end
     end
-    puts output.empty? ? "No cars found" : output[0..-3]
+    puts output.empty? ? "Not found" : output[0..-3]
 end
 
 def slot_numbers_for_cars_with_colour(color)
@@ -58,7 +58,7 @@ def slot_numbers_for_cars_with_colour(color)
             output << "#{i+1}, "
         end
     end
-    puts output.empty? ? "No cars found" : output[0..-3]
+    puts output.empty? ? "Not found" : output[0..-3]
 end
 
 def slot_number_for_registration_number(plate)
@@ -78,13 +78,13 @@ end
 
 $lot = Array.new
 $commands = {
-    "create"                                => method(:create_parking_lot),
+    "create_parking_lot"                    => method(:create_parking_lot),
     "park"                                  => method(:park),
     "leave"                                 => method(:leave),
     "status"                                => method(:status),
-    "plates_color"                          => method(:plate_numbers_for_cars_with_colour),
-    "slots_color"                           => method(:slot_numbers_for_cars_with_colour),
-    "slot_plate"                            => method(:slot_number_for_registration_number),
+    "plate_numbers_for_cars_with_colour"    => method(:plate_numbers_for_cars_with_colour),
+    "slot_numbers_for_cars_with_colour"     => method(:slot_numbers_for_cars_with_colour),
+    "slot_number_for_registration_number"   => method(:slot_number_for_registration_number),
     "quit"                                  => method(:quit)
 }
 
