@@ -3,10 +3,17 @@ def create_parking_lot(size)
     puts "Created a parking lot with #{size} slots"
 end
 
-def park(plate, color)
-    if $lot.size == 0
+def lot_created
+    if $lot == nil
         puts "Parking lot is not created yet"
-    elsif !$lot.include?(nil)
+        return false
+    end
+    return true
+end
+
+def park(plate, color)
+    return unless lot_created
+    if !$lot.include?(nil)
         puts "Sorry, parking lot is full"
     else
         slot = $lot.find_index(nil)
@@ -16,9 +23,8 @@ def park(plate, color)
 end
 
 def leave(slot)
-    if $lot.size == 0
-        puts "Parking lot is not created yet"
-    elsif slot.to_i < 1 or slot.to_i > $lot.size
+    return unless lot_created
+    if slot.to_i < 1 or slot.to_i > $lot.size
         puts "Slot number #{slot} doesn't exist"
     else
         $lot[(slot.to_i)-1] = nil
@@ -27,9 +33,8 @@ def leave(slot)
 end
 
 def status()
-    if $lot.size == 0
-        puts "Parking lot is not created yet"
-    elsif $lot.all?(&:nil?)
+    return unless lot_created
+    if $lot.all?(&:nil?)
         puts "Parking lot is empty"
     else
         puts "Slot No. | Plate Number | Colour"
@@ -42,6 +47,7 @@ def status()
 end
 
 def plate_numbers_for_cars_with_colour(color)
+    return unless lot_created
     output = ""
     for car in $lot
         if !car.nil? and car[:color].downcase == color.downcase
@@ -52,6 +58,7 @@ def plate_numbers_for_cars_with_colour(color)
 end
 
 def slot_numbers_for_cars_with_colour(color)
+    return unless lot_created
     output = ""
     for i in 0..$lot.size
         if !$lot[i].nil? and $lot[i][:color].downcase == color.downcase
@@ -62,6 +69,7 @@ def slot_numbers_for_cars_with_colour(color)
 end
 
 def slot_number_for_registration_number(plate)
+    return unless lot_created
     index = nil
     for i in 0..$lot.size
         if !$lot[i].nil? and $lot[i][:plate].downcase == plate.downcase
@@ -76,7 +84,7 @@ def quit()
     exit
 end
 
-$lot = Array.new
+$lot = nil
 $commands = {
     "create_parking_lot"                    => method(:create_parking_lot),
     "park"                                  => method(:park),
