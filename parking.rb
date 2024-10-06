@@ -17,24 +17,28 @@ def park(plate, color)
 end
 
 def leave(slot)
-    $lot[(slot.to_i)-1] = nil
-    puts "Slot number #{slot} is free"
+    if $lot.size == 0
+        puts "Create a parking lot first"
+    elsif slot > $lot.size 
+        puts "Slot number #{slot} doesn't exist"
+    else
+        $lot[(slot.to_i)-1] = nil
+        puts "Slot number #{slot} is free"
+    end
 end
 
 def status()
-    if $lot.size != 0
-        if $lot.all?(&:nil?)
-            puts "Parking lot is empty"
-        else
-            puts "Slot No. | Plate Number | Colour"
-            for i in 0..$lot.size
-                unless $lot[i].nil?
-                    puts "#{i+1} | #{$lot[i][:plate]} | #{$lot[i][:color]}"
-                end
+    if $lot.size == 0
+        puts "Create a parking lot first"
+    elsif $lot.all?(&:nil?)
+        puts "Parking lot is empty"
+    else
+        puts "Slot No. | Plate Number | Colour"
+        for i in 0..$lot.size
+            unless $lot[i].nil?
+                puts "#{i+1} | #{$lot[i][:plate]} | #{$lot[i][:color]}"
             end
         end
-    else
-        puts "Create a parking lot first"
     end
 end
 
