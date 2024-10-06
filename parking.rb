@@ -5,14 +5,22 @@ def create_parking_lot(size)
 end
 
 def park(plate, color)
-    # function logic goes here
-
-    puts "Allocated slot number: n"
+    if $lot.size == 0
+        puts "Create a parking lot first"
+    elsif !$lot.include?(nil)
+        puts "Parking lot is full"
+    else
+        slot = $lot.find_index(nil)
+        $lot[slot] = {
+            "plate" => plate,
+            "color" => color
+        }
+        puts "Allocated slot number: " + (slot+1).to_s
+    end
 end
 
 def leave(slot)
-    # function logic goes here
-
+    $lot[(slot.to_i)-1] = nil
     puts "Slot number " + slot + " is free"
 end
 
