@@ -23,8 +23,8 @@ def status()
         else
             puts "Slot No. | Plate Number | Colour"
             for i in 0..$lot.size
-                if $lot.slots[i].nil?
-                    puts i + " | " + $lot.slots[i][plate] + " | " + $lot.slots[i][color]
+                unless $lot[i].nil?
+                    puts (i+1).to_s + " | " + $lot[i]["plate"].to_s + " | " + $lot[i]["color"].to_s
                 end
             end
         end
@@ -39,7 +39,7 @@ end
 
 $lot = Array.new
 $commands = {
-    "create_parking_lot" => {
+    "create" => {
         "method"    => method(:create_parking_lot),
         "arg_count" => 1
     },
