@@ -42,7 +42,13 @@ def status()
 end
 
 def plate_numbers_for_cars_with_colour(color)
-    puts "list of plate numbers"
+    output = ""
+    for car in $lot
+        if !car.nil? and car[:color].downcase == color.downcase
+            output << "#{car[:plate]}, "
+        end
+    end
+    puts output.empty? ? "No cars found" : output[0..-3]
 end
 
 def slot_numbers_for_cars_with_colour(color)
@@ -59,7 +65,7 @@ end
 
 $lot = Array.new
 $commands = {
-    "create_parking_lot"                    => method(:create_parking_lot),
+    "create"                                => method(:create_parking_lot),
     "park"                                  => method(:park),
     "leave"                                 => method(:leave),
     "status"                                => method(:status),
