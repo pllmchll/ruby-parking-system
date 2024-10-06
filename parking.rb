@@ -18,7 +18,7 @@ end
 def leave(slot)
     if $lot.size == 0
         puts "Parking lot is not created yet"
-    elsif slot.to_i > $lot.size 
+    elsif slot.to_i < 1 or slot.to_i > $lot.size
         puts "Slot number #{slot} doesn't exist"
     else
         $lot[(slot.to_i)-1] = nil
