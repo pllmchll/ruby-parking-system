@@ -4,7 +4,9 @@ def create_parking_lot(size)
 end
 
 def park(plate, color)
-    if !$lot.include?(nil)
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif !$lot.include?(nil)
         puts "Parking lot is full"
     else
         slot = $lot.find_index(nil)
@@ -14,7 +16,9 @@ def park(plate, color)
 end
 
 def leave(slot)
-    if slot.to_i > $lot.size 
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif slot.to_i > $lot.size 
         puts "Slot number #{slot} doesn't exist"
     else
         $lot[(slot.to_i)-1] = nil
@@ -23,7 +27,9 @@ def leave(slot)
 end
 
 def status()
-    if $lot.all?(&:nil?)
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif $lot.all?(&:nil?)
         puts "Parking lot is empty"
     else
         puts "Slot No. | Plate Number | Colour"
@@ -41,26 +47,11 @@ end
 
 $lot = Array.new
 $commands = {
-    "create_parking_lot" => {
-        method:     method(:create_parking_lot),
-        arg_count:  1
-    },
-    "park" => {
-        method:     method(:park),
-        arg_count:  2
-    },
-    "leave" => {
-        method:     method(:leave),
-        arg_count:  1
-    },
-    "status" => {
-        method:     method(:status),
-        arg_count:  0
-    },
-    "quit" => {
-        method:     method(:quit),
-        arg_count:  0
-    }
+    "create_parking_lot"                    => method(:create_parking_lot),
+    "park"                                  => method(:park),
+    "leave"                                 => method(:leave),
+    "status"                                => method(:status),
+    "quit"                                  => method(:quit)
 }
 
 # main program
@@ -68,21 +59,18 @@ loop do
     print "> "
     input = gets.chomp
 
-    key = input.split[0]
+    command = input.split[0]
     args = input.split[1..]
 
-    if !$commands.key?(key)
-        puts "Error: invalid command '#{key}'"
-    else
-        command = $commands[key]
-        if args.length() < command[:arg_count]
-            puts "Error: not enough parameters"
-        elsif args.length() > command[:arg_count] 
-            puts "Error: too many parameters"
-        elsif $lot.size == 0 and key != "create_parking_lot"
-            puts "Create a parking lot first"
-        else
-            command[:method].call(*args)
-        end
+    begin
+        $commands[command].call(*args)
+    rescue NoMethodError => e
+        puts "Error: invalid command #{command}"
+        next
+    rescue ArgumentError => e
+        given = e.message.split[-3].chr.to_i
+        expected = e.message.split[-1].chr.to_i
+        puts (given-expected) < 0 ? "Error: not enough parameters" : "Error: too many parameters"
+        next
     end
 end
