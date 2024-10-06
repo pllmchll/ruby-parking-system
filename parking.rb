@@ -80,6 +80,19 @@ def slot_number_for_registration_number(plate)
     puts index.nil? ? "Not found" : index
 end
 
+def help()
+    help =  "Available commands:\n\n"\
+            "create_parking_lot [n]                         Create a new parking lot instance with n slots\n"\
+            "park [plate] [color]                           Park a car with the given plate and color to an empty slot\n"\
+            "leave [slot]                                   Frees up the specified slot number\n"\
+            "status                                         Shows currently parked cars on a table\n"\
+            "plate_numbers_for_cars_with_colour [color]     List the plate numbers of all cars with the given color\n"\
+            "slot_numbers_for_cars_with_colour [color]      List the slot numbers where all cars with the given color are parked\n"\
+            "slot_number_for_registration_number [plate]    Get the slot number where the car with the specified plate number is parked\n"\
+            "quit                                           Quit the program\n\n"
+    puts help
+end
+
 def quit()
     exit
 end
@@ -93,12 +106,15 @@ $commands = {
     "plate_numbers_for_cars_with_colour"    => method(:plate_numbers_for_cars_with_colour),
     "slot_numbers_for_cars_with_colour"     => method(:slot_numbers_for_cars_with_colour),
     "slot_number_for_registration_number"   => method(:slot_number_for_registration_number),
+    "help"                                  => method(:help),
     "quit"                                  => method(:quit)
 }
 
 # main program
+puts "Parking Management System"
+puts "Type 'help' to see available commands"
 loop do
-    print "> "
+    print ">> "
     input = gets.chomp
 
     command = input.split[0]
