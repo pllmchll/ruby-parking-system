@@ -7,7 +7,7 @@ def park(plate, color)
     if $lot.size == 0
         puts "Parking lot is not created yet"
     elsif !$lot.include?(nil)
-        puts "Parking lot is full"
+        puts "Sorry, parking lot is full"
     else
         slot = $lot.find_index(nil)
         $lot[slot] = {plate:, color:}
@@ -41,6 +41,18 @@ def status()
     end
 end
 
+def plate_numbers_for_cars_with_colour(color)
+    puts "list of plate numbers"
+end
+
+def slot_numbers_for_cars_with_colour(color)
+    puts "list of slot numbers"
+end
+
+def slot_number_for_registration_number(plate)
+    puts "slot number"
+end
+
 def quit()
     exit
 end
@@ -51,6 +63,9 @@ $commands = {
     "park"                                  => method(:park),
     "leave"                                 => method(:leave),
     "status"                                => method(:status),
+    "plates_color"                          => method(:plate_numbers_for_cars_with_colour),
+    "slots_color"                           => method(:slot_numbers_for_cars_with_colour),
+    "slot_plate"                            => method(:slot_number_for_registration_number),
     "quit"                                  => method(:quit)
 }
 
