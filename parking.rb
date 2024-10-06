@@ -1,6 +1,6 @@
 def create_parking_lot(size)
-    # function logic goes here
-    
+    $lot = Array.new(size.to_i)
+
     puts "Created a parking lot with " + size + " slots"
 end
 
@@ -16,10 +16,28 @@ def leave(slot)
     puts "Slot number " + slot + " is free"
 end
 
+def status()
+    if $lot.size != 0
+        if $lot.all?(&:nil?)
+            puts "Parking lot is empty"
+        else
+            puts "Slot No. | Plate Number | Colour"
+            for i in 0..$lot.size
+                if $lot.slots[i].nil?
+                    puts i + " | " + $lot.slots[i][plate] + " | " + $lot.slots[i][color]
+                end
+            end
+        end
+    else
+        puts "Create a parking lot first"
+    end
+end
+
 def quit()
     exit
 end
 
+$lot = Array.new
 $commands = {
     "create_parking_lot" => {
         "method"    => method(:create_parking_lot),
@@ -32,6 +50,10 @@ $commands = {
     "leave" => {
         "method"    => method(:leave),
         "arg_count" => 1
+    },
+    "status" => {
+        "method"    => method(:status),
+        "arg_count" => 0
     },
     "quit" => {
         "method"    => method(:quit),
