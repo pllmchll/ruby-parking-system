@@ -1,63 +1,76 @@
 def create_parking_lot(size)
-    # function logic goes here
-    
-    puts "Created a parking lot with " + size + " slots"
+    $lot = Array.new(size.to_i)
+    puts "Created a parking lot with #{size} slots"
 end
 
 def park(plate, color)
-    # function logic goes here
-
-    puts "Allocated slot number: n"
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif !$lot.include?(nil)
+        puts "Parking lot is full"
+    else
+        slot = $lot.find_index(nil)
+        $lot[slot] = {plate:, color:}
+        puts "Allocated slot number: #{slot+1}"
+    end
 end
 
 def leave(slot)
-    # function logic goes here
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif slot.to_i < 1 or slot.to_i > $lot.size
+        puts "Slot number #{slot} doesn't exist"
+    else
+        $lot[(slot.to_i)-1] = nil
+        puts "Slot number #{slot} is free"
+    end
+end
 
-    puts "Slot number " + slot + " is free"
+def status()
+    if $lot.size == 0
+        puts "Parking lot is not created yet"
+    elsif $lot.all?(&:nil?)
+        puts "Parking lot is empty"
+    else
+        puts "Slot No. | Plate Number | Colour"
+        for i in 0..$lot.size
+            unless $lot[i].nil?
+                puts "#{i+1} | #{$lot[i][:plate]} | #{$lot[i][:color]}"
+            end
+        end
+    end
 end
 
 def quit()
-    $run_program = false
+    exit
 end
 
-$run_program = true
+$lot = Array.new
 $commands = {
-    "create_parking_lot" => {
-        "method"    => method(:create_parking_lot),
-        "arg_count" => 1
-    },
-    "park" => {
-        "method"    => method(:park),
-        "arg_count" => 2
-    },
-    "leave" => {
-        "method"    => method(:leave),
-        "arg_count" => 1
-    },
-    "quit" => {
-        "method"    => method(:quit),
-        "arg_count" => 0
-    }
+    "create_parking_lot"                    => method(:create_parking_lot),
+    "park"                                  => method(:park),
+    "leave"                                 => method(:leave),
+    "status"                                => method(:status),
+    "quit"                                  => method(:quit)
 }
 
 # main program
-while $run_program == true do
+loop do
     print "> "
     input = gets.chomp
 
-    key = input.split[0]
+    command = input.split[0]
     args = input.split[1..]
 
-    if $commands.key?(key)
-        command = $commands[key]
-        if args.length() < command["arg_count"]
-            puts "Error: not enough parameters"
-        elsif args.length() > command["arg_count"] 
-            puts "Error: too many parameters"
-        else
-            command["method"].call(*args)
-        end
-    else
-        puts "Error: invalid command"
+    begin
+        $commands[command].call(*args)
+    rescue NoMethodError => e
+        puts "Error: invalid command #{command}"
+        next
+    rescue ArgumentError => e
+        given = e.message.split[-3].chr.to_i
+        expected = e.message.split[-1].chr.to_i
+        puts (given-expected) < 0 ? "Error: not enough parameters" : "Error: too many parameters"
+        next
     end
 end
