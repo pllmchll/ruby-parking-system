@@ -11,17 +11,14 @@ def park(plate, color)
         puts "Parking lot is full"
     else
         slot = $lot.find_index(nil)
-        $lot[slot] = {
-            "plate" => plate,
-            "color" => color
-        }
-        puts "Allocated slot number: " + (slot+1).to_s
+        $lot[slot] = {plate:, color:}
+        puts "Allocated slot number: #{slot+1}"
     end
 end
 
 def leave(slot)
     $lot[(slot.to_i)-1] = nil
-    puts "Slot number " + slot + " is free"
+    puts "Slot number #{slot} is free"
 end
 
 def status()
@@ -32,7 +29,7 @@ def status()
             puts "Slot No. | Plate Number | Colour"
             for i in 0..$lot.size
                 unless $lot[i].nil?
-                    puts (i+1).to_s + " | " + $lot[i]["plate"].to_s + " | " + $lot[i]["color"].to_s
+                    puts "#{i+1} | #{$lot[i][:plate]} | #{$lot[i][:color]}"
                 end
             end
         end
@@ -48,24 +45,24 @@ end
 $lot = Array.new
 $commands = {
     "create" => {
-        "method"    => method(:create_parking_lot),
-        "arg_count" => 1
+        method:     method(:create_parking_lot),
+        arg_count:  1
     },
     "park" => {
-        "method"    => method(:park),
-        "arg_count" => 2
+        method:     method(:park),
+        arg_count:  2
     },
     "leave" => {
-        "method"    => method(:leave),
-        "arg_count" => 1
+        method:     method(:leave),
+        arg_count:  1
     },
     "status" => {
-        "method"    => method(:status),
-        "arg_count" => 0
+        method:     method(:status),
+        arg_count:  0
     },
     "quit" => {
-        "method"    => method(:quit),
-        "arg_count" => 0
+        method:     method(:quit),
+        arg_count:  0
     }
 }
 
@@ -77,16 +74,16 @@ loop do
     key = input.split[0]
     args = input.split[1..]
 
-    if $commands.key?(key)
+    if !$commands.key?(key)
+        puts "Error: invalid command"
+    else
         command = $commands[key]
-        if args.length() < command["arg_count"]
+        if args.length() < command[:arg_count]
             puts "Error: not enough parameters"
-        elsif args.length() > command["arg_count"] 
+        elsif args.length() > command[:arg_count] 
             puts "Error: too many parameters"
         else
-            command["method"].call(*args)
+            command[:method].call(*args)
         end
-    else
-        puts "Error: invalid command"
     end
 end
